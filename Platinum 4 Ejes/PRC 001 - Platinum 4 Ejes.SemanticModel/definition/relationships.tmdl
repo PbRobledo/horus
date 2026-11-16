@@ -1,0 +1,23 @@
+relationship 65b63d24-a08e-582c-bb78-898819a37688
+	fromColumn: 'PRC Precio_Simple'.Fecha
+	toColumn: Calendario.Date
+
+relationship 240f0a3f-e59e-5244-b692-6e21924fdc1e
+	fromColumn: 'PRC Price_Index'.Fecha
+	toColumn: Calendario.Date
+
+relationship 5d65439c-32a3-5020-a8ee-9a51f3db53d2
+	fromColumn: 'PRC Precio_Simple'.Clave_Cliente
+	toColumn: Clientes.'Clave cliente'
+
+relationship 7f53cab5-d2f8-5942-bb3d-b35642b3841b
+	fromColumn: 'PRC Price_Index'.Clave_Cliente
+	toColumn: Clientes.'Clave cliente'
+
+relationship 792df49c-cb2e-5b5b-9814-42941df34850
+	fromColumn: 'PRC Precio_Simple'.Region_v2
+	toColumn: Regiones.'Región v2'
+
+relationship e98198c3-cb9d-5353-a930-cdb6048e7479
+	fromColumn: 'PRC Price_Index'.Region_v2
+	toColumn: Regiones.'Región v2'

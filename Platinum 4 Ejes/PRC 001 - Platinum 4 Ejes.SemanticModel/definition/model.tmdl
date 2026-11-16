@@ -1,0 +1,24 @@
+model Model
+	culture: es-AR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-AR
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["PRC Precio_Simple","PRC Price_Index"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'PRC Precio_Simple'
+ref table 'PRC Price_Index'
+ref table _Medidas
+ref table Calendario
+ref table Clientes
+ref table Regiones
+
+ref cultureInfo es-AR
+
