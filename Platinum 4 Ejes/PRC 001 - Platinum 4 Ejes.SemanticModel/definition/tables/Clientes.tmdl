@@ -1,0 +1,79 @@
+table Clientes
+	lineageTag: 65614ee7-c1db-5345-985d-4802ca520d34
+
+	column 'Clave cliente'
+		dataType: string
+		isHidden
+		lineageTag: 9f102d0e-f80e-53ed-bbf6-128ad307583f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Clave cliente]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nivel cliente'
+		dataType: string
+		lineageTag: 9673be30-369b-5a0d-bbc3-704a5468d7ba
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nivel cliente]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Subcanal
+		dataType: string
+		lineageTag: 3698cf0a-b77a-518a-847e-06a5c154ee28
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Subcanal]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cliente
+		dataType: string
+		lineageTag: e0db87a2-787e-5e73-878a-578c28b57e50
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cliente]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fuente
+		dataType: string
+		lineageTag: 08caa6ca-c74e-50dc-ad35-3eb22bd0761a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Fuente]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Clientes = calculated
+		mode: import
+		source =
+				-- Eje Cliente, compartido por los dos bloques (Precio Simple y Price Index).
+				-- Una fila por Nivel + Subcanal + Cliente. Nivel "Subcanal" = panel COPI (Cliente = "(Todos)");
+				-- nivel "Cliente" = cadena de Canal Moderno, panel SNP. Son dos relevamientos independientes:
+				-- las medidas nunca los suman entre sí (ver _Medidas).
+				VAR _ps =
+				    SELECTCOLUMNS (
+				        'PRC Precio_Simple',
+				        "Clave cliente", 'PRC Precio_Simple'[Clave_Cliente],
+				        "Nivel cliente", 'PRC Precio_Simple'[Nivel_Cliente],
+				        "Subcanal", 'PRC Precio_Simple'[Subcanal],
+				        "Cliente", 'PRC Precio_Simple'[Cliente],
+				        "Fuente", 'PRC Precio_Simple'[Fuente]
+				    )
+				VAR _pi =
+				    SELECTCOLUMNS (
+				        'PRC Price_Index',
+				        "Clave cliente", 'PRC Price_Index'[Clave_Cliente],
+				        "Nivel cliente", 'PRC Price_Index'[Nivel_Cliente],
+				        "Subcanal", 'PRC Price_Index'[Subcanal],
+				        "Cliente", 'PRC Price_Index'[Cliente],
+				        "Fuente", 'PRC Price_Index'[Fuente]
+				    )
+				RETURN
+				    FILTER ( DISTINCT ( UNION ( _ps, _pi ) ), NOT ISBLANK ( [Clave cliente] ) )
+
+	annotation PBI_Id = 07908d52cf1751b9bdf21771bad6cf55
+
