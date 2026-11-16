@@ -1,0 +1,325 @@
+table 'HAC Tabla_Organico'
+	lineageTag: 7ce07ad5-ffff-4ac9-a128-7be68d276864
+
+	column semana_inicio
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e37288e4-6142-47f3-9202-9a71dc34c390
+		summarizeBy: none
+		sourceColumn: semana_inicio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column anio_iso
+		dataType: int64
+		formatString: 0
+		lineageTag: b67660ac-9549-458d-a8c4-b5f5c436bdc6
+		summarizeBy: none
+		sourceColumn: anio_iso
+
+		annotation SummarizationSetBy = Automatic
+
+	column semana_iso
+		dataType: int64
+		formatString: 0
+		lineageTag: 5217923c-b759-4c21-8ae0-6ba499d25355
+		summarizeBy: none
+		sourceColumn: semana_iso
+
+		annotation SummarizationSetBy = Automatic
+
+	column semana_label
+		dataType: string
+		lineageTag: af56398e-c95b-4e1a-8cd1-f1e889500267
+		summarizeBy: none
+		sourceColumn: semana_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria
+		dataType: string
+		lineageTag: a1612fd6-ad88-4cf8-8e53-53080c1d2458
+		summarizeBy: none
+		sourceColumn: categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column cabezas
+		dataType: double
+		formatString: #,0.#
+		lineageTag: b94356cc-3893-44cf-844c-c5fd57ac2a43
+		summarizeBy: sum
+		sourceColumn: cabezas
+
+		annotation SummarizationSetBy = Automatic
+
+	column kg_vivos
+		dataType: double
+		formatString: #,0
+		lineageTag: 44909ce6-c108-44d0-9cb5-41ec0b9aaeec
+		summarizeBy: sum
+		sourceColumn: kg_vivos
+
+		annotation SummarizationSetBy = Automatic
+
+	column kg_carne
+		dataType: double
+		formatString: #,0
+		lineageTag: a44aef63-738e-4564-8f39-228c04cd8796
+		summarizeBy: sum
+		sourceColumn: kg_carne
+
+		annotation SummarizationSetBy = Automatic
+
+	column kg_carne_liquidados
+		dataType: double
+		formatString: #,0
+		lineageTag: df3d6572-f1d1-4902-a2a6-52407d29397e
+		summarizeBy: sum
+		sourceColumn: kg_carne_liquidados
+
+		annotation SummarizationSetBy = Automatic
+
+	column rinde
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 8f031186-c616-4244-89e8-7c1d17b5d867
+		summarizeBy: none
+		sourceColumn: rinde
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_hacienda
+		dataType: double
+		formatString: \$ #,0
+		lineageTag: 7fc9c5c4-c3b0-4987-8c88-bbb45adab562
+		summarizeBy: sum
+		sourceColumn: monto_hacienda
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_gastos
+		dataType: double
+		formatString: \$ #,0
+		lineageTag: 75f57d97-4e0b-4fa9-b2d9-f14662f7b8f5
+		summarizeBy: sum
+		sourceColumn: monto_gastos
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_total
+		dataType: double
+		formatString: \$ #,0
+		lineageTag: 9c0759ce-808c-4130-aa2b-112191512e0a
+		summarizeBy: sum
+		sourceColumn: monto_total
+
+		annotation SummarizationSetBy = Automatic
+
+	column precio_tabla_pond
+		dataType: double
+		formatString: \$ #,0.00
+		lineageTag: 8063fdf9-1f48-4258-b50e-86f3ee4e5134
+		summarizeBy: none
+		sourceColumn: precio_tabla_pond
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_actualizacion
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c03acb2b-435e-4898-beb4-1098f2b7de62
+		summarizeBy: none
+		sourceColumn: fecha_actualizacion
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_faena
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 0c2f954c-138c-4850-bcea-9c17d7b9965a
+		summarizeBy: none
+		sourceColumn: fecha_faena
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column tropa
+		dataType: string
+		lineageTag: 5245f436-d642-431e-88c7-4756c84ef161
+		summarizeBy: none
+		sourceColumn: tropa
+
+		annotation SummarizationSetBy = Automatic
+
+	column proveedor
+		dataType: string
+		lineageTag: 44efda51-3a4f-4ef1-890c-39549be1bc87
+		summarizeBy: none
+		sourceColumn: proveedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column cab_a
+		dataType: double
+		formatString: #,0.#
+		lineageTag: 709fdd70-7e92-4b77-86cd-39fabb308858
+		summarizeBy: sum
+		sourceColumn: cab_a
+
+		annotation SummarizationSetBy = Automatic
+
+	column cab_b
+		dataType: double
+		formatString: #,0.#
+		lineageTag: 79e6492f-cde6-4994-8f17-9bb6b9d8252e
+		summarizeBy: sum
+		sourceColumn: cab_b
+
+		annotation SummarizationSetBy = Automatic
+
+	column cab_c
+		dataType: double
+		formatString: #,0.#
+		lineageTag: d80be908-e7f8-4c5a-8d64-4252fbf670b8
+		summarizeBy: sum
+		sourceColumn: cab_c
+
+		annotation SummarizationSetBy = Automatic
+
+	column cab_d
+		dataType: double
+		formatString: #,0.#
+		lineageTag: 25193d5f-7acc-4cbf-a099-62e15b9d9da5
+		summarizeBy: sum
+		sourceColumn: cab_d
+
+		annotation SummarizationSetBy = Automatic
+
+	column cab_e
+		dataType: double
+		formatString: #,0.#
+		lineageTag: c1f5e1ef-4c08-41d7-9098-497e85c826fa
+		summarizeBy: sum
+		sourceColumn: cab_e
+
+		annotation SummarizationSetBy = Automatic
+
+	column cab_xq
+		dataType: double
+		formatString: #,0.#
+		lineageTag: 0afe909c-3809-4c8d-a50a-d7823331f43a
+		summarizeBy: sum
+		sourceColumn: cab_xq
+
+		annotation SummarizationSetBy = Automatic
+
+	column cab_xd
+		dataType: double
+		formatString: #,0.#
+		lineageTag: 6a41d4fa-96c4-41b9-88dc-2a6197f92182
+		summarizeBy: sum
+		sourceColumn: cab_xd
+
+		annotation SummarizationSetBy = Automatic
+
+	column cab_menor80
+		dataType: double
+		formatString: #,0.#
+		lineageTag: 9904203e-d4a9-42f2-bd4e-5d69f3362849
+		summarizeBy: sum
+		sourceColumn: cab_menor80
+
+		annotation SummarizationSetBy = Automatic
+
+	column precio_final
+		dataType: double
+		formatString: \$ #,0.00
+		lineageTag: 9c8b5fd5-2ee2-40bc-884e-5c066bb0c87e
+		summarizeBy: none
+		sourceColumn: precio_final
+
+		annotation SummarizationSetBy = Automatic
+
+	column comprador
+		dataType: string
+		lineageTag: e82b2e40-279e-4ab1-84ff-9a7ce6aac2ab
+		summarizeBy: none
+		sourceColumn: comprador
+
+		annotation SummarizationSetBy = Automatic
+
+	column promedio_cabeza
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 55b24335-e226-4899-9c61-9c48bbf51716
+		summarizeBy: none
+		sourceColumn: promedio_cabeza
+
+		annotation SummarizationSetBy = Automatic
+
+	column promedio_media_res
+		dataType: double
+		formatString: #,0.0
+		lineageTag: a0e6f57d-be6c-4881-9801-52046cf3b23e
+		summarizeBy: none
+		sourceColumn: promedio_media_res
+
+		annotation SummarizationSetBy = Automatic
+
+	column plazo
+		dataType: int64
+		formatString: 0
+		lineageTag: 93260da6-9b86-4e70-9abd-735916e20cf8
+		summarizeBy: none
+		sourceColumn: plazo
+
+		annotation SummarizationSetBy = Automatic
+
+	column categorias_mezcla
+		dataType: string
+		lineageTag: 86d0f639-4a6c-4f71-8a71-c64d0ded31dc
+		summarizeBy: none
+		sourceColumn: categorias_mezcla
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_compra
+		dataType: string
+		lineageTag: 071cea16-f320-4c9a-8c00-8d9f86b7bcab
+		summarizeBy: none
+		sourceColumn: tipo_compra
+
+		annotation SummarizationSetBy = Automatic
+
+	column tropa_liquidada
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 57ca6010-8a15-4fe6-9d9e-14c5cb2714e5
+		summarizeBy: none
+		sourceColumn: tropa_liquidada
+
+		annotation SummarizationSetBy = Automatic
+
+	column destino
+		dataType: string
+		lineageTag: efc01e45-db69-4d46-8803-a2e31b3548bb
+		summarizeBy: none
+		sourceColumn: destino
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'HAC Tabla_Organico' = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Database("10.1.82.27", "PROD_SILVER"),
+				    HAC_Tabla_Organico = Origen{[Schema="HAC",Item="Tabla_Organico"]}[Data]
+				in
+				    HAC_Tabla_Organico
+
+	annotation PBI_ResultType = Table
+

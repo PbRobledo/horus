@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "CMP_HAC 002 - Tabla China y Orgánica"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ea6e53a0-49ec-41da-aaff-46fd105c2031"
+  }
+}

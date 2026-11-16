@@ -1,0 +1,32 @@
+table Calidades
+	lineageTag: 30e58905-0882-4563-9463-24e1b407b469
+
+	column Calidad
+		dataType: string
+		lineageTag: 834fd7df-8ac2-4138-bf47-0c4ef0c86058
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Calidad]
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Orden
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5a2c7a6e-2a83-45f0-89a8-91b23c8cb54b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Orden]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calidades = calculated
+		mode: import
+		source =
+				-- Calidades de faena para las tortas; sin relaciones: la medida "Cab por calidad" lee el filtro.
+				DATATABLE ( "Calidad", STRING, "Orden", INTEGER, { { "A", 1 }, { "B", 2 }, { "C", 3 }, { "D", 4 }, { "E", 5 }, { "Decomiso", 6 } } )
+
+	annotation PBI_Id = 2c59bde8237e4dd7a7dbbd49792d0c80
+

@@ -1,0 +1,61 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 426,
+            "y": 0
+          },
+          "nodeIndex": "HAC Tabla_China",
+          "nodeLineageTag": "bc8c4251-c73a-46d3-ba14-ff9ce059865f",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 119,
+            "y": 39
+          },
+          "nodeIndex": "HAC Tabla_Organico",
+          "nodeLineageTag": "7ce07ad5-ffff-4ac9-a128-7be68d276864",
+          "size": {
+            "height": 261,
+            "width": 165
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 736,
+            "y": 43
+          },
+          "nodeIndex": "_Medidas",
+          "nodeLineageTag": "27f18f5f-ea91-459e-9f6e-c7ff7c20a58b",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

@@ -1,0 +1,134 @@
+table Calendario
+	lineageTag: 3f219db1-c3dd-4f0c-8076-2bbca4697689
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: dd/mm/yyyy
+		lineageTag: cc7f2581-9c0e-4944-9c8f-b61eb24a075a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Semana inicio'
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		lineageTag: f5255779-c9bb-4f9d-8564-8f55c3c38cbc
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Semana inicio]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Año
+		dataType: int64
+		formatString: 0
+		lineageTag: 34b3fc6a-09ad-4037-914e-5a4077c776c5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Año]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mes Nro'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0e24e2a1-ceb7-488a-bb57-389da587d22f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mes Nro]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes
+		dataType: string
+		lineageTag: 189028bf-8d32-4485-a0a2-19a10a4d8a73
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mes]
+		sortByColumn: 'Mes Nro'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Año ISO'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7944a22a-5f6c-4804-b8ee-a44c2c3fb2c6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Año ISO]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Semana ISO'
+		dataType: int64
+		formatString: 0
+		lineageTag: 988052d7-a782-4b5e-9531-a9e9c3d1a440
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Semana ISO]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Semana
+		dataType: string
+		lineageTag: b1557650-79b1-4ae6-8456-93bdf9631151
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Semana]
+		sortByColumn: 'Semana índice'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Semana índice'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a3df2e03-dd22-4a75-bf5b-66477d77e17f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Semana índice]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Semana filtro' =
+			-- la última semana con faena en cualquiera de los programas se muestra como "Semana actual"
+			VAR _max = MAX ( MAX ( 'HAC Tabla_China'[fecha_faena] ), MAX ( 'HAC Tabla_Organico'[fecha_faena] ) )
+			VAR _ult = INT ( ( _max - WEEKDAY ( _max, 3 ) - DATE ( 2024, 12, 30 ) ) / 7 )
+			RETURN
+			    IF ( Calendario[Semana índice] = _ult, "Semana actual", Calendario[Semana] )
+		dataType: string
+		lineageTag: 723ced15-c9f7-42e7-9e5f-dfceccba0787
+		summarizeBy: none
+		sortByColumn: 'Semana índice'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendario = calculated
+		mode: import
+		source =
+				-- Calendario único: cubre de lunes a domingo las semanas con faena en ambas tablas.
+				-- Semana = semana ISO del lunes de la fecha de faena (misma regla que semana_inicio del ETL).
+				VAR _min = MIN ( MIN ( 'HAC Tabla_China'[fecha_faena] ), MIN ( 'HAC Tabla_Organico'[fecha_faena] ) )
+				VAR _max = MAX ( MAX ( 'HAC Tabla_China'[fecha_faena] ), MAX ( 'HAC Tabla_Organico'[fecha_faena] ) )
+				VAR _ini = _min - WEEKDAY ( _min, 3 )
+				VAR _fin = _max - WEEKDAY ( _max, 3 ) + 6
+				RETURN
+				    ADDCOLUMNS (
+				        CALENDAR ( _ini, _fin ),
+				        "Semana inicio", [Date] - WEEKDAY ( [Date], 3 ),
+				        "Año", YEAR ( [Date] - WEEKDAY ( [Date], 3 ) ),
+				        "Mes Nro", MONTH ( [Date] - WEEKDAY ( [Date], 3 ) ),
+				        "Mes", FORMAT ( [Date] - WEEKDAY ( [Date], 3 ), "mmmm" ),
+				        "Año ISO", YEAR ( [Date] - WEEKDAY ( [Date], 2 ) + 4 ),
+				        "Semana ISO", WEEKNUM ( [Date], 21 ),
+				        "Semana", YEAR ( [Date] - WEEKDAY ( [Date], 2 ) + 4 ) & "-S" & FORMAT ( WEEKNUM ( [Date], 21 ), "00" ),
+				        "Semana índice", INT ( ( [Date] - WEEKDAY ( [Date], 3 ) - DATE ( 2024, 12, 30 ) ) / 7 )
+				    )
+
+	annotation PBI_Id = 36a8c664c408484c8df4454f2dbff3ef
+

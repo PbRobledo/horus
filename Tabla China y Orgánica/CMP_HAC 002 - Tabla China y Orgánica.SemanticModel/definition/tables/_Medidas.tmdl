@@ -1,0 +1,797 @@
+table _Medidas
+	lineageTag: 27f18f5f-ea91-459e-9f6e-c7ff7c20a58b
+
+	measure 'Total Cabezas' = [China Cabezas] + [Org Cabezas]
+		formatString: #,0.#
+		displayFolder: Total ambos programas
+		lineageTag: f82ab46b-704a-4a1a-8174-3696974cf382
+
+	measure 'China Tropas' = COUNTROWS ( 'HAC Tabla_China' )
+		formatString: #,0
+		displayFolder: China\Base
+		lineageTag: cad18e32-0f83-42c6-a0c6-78c2754d0e14
+
+	measure 'China Cabezas' = SUM ( 'HAC Tabla_China'[cabezas] )
+		formatString: #,0.#
+		displayFolder: China\Base
+		lineageTag: 6a61b3d0-a3db-4f14-881d-a7119b1c0f9a
+
+	measure 'China Kg Vivos' = SUM ( 'HAC Tabla_China'[kg_vivos] )
+		formatString: #,0
+		displayFolder: China\Base
+		lineageTag: bb79af5a-1de9-46ab-b7b1-873a4e41393b
+
+	measure 'China Kg Carne' = SUM ( 'HAC Tabla_China'[kg_carne] )
+		formatString: #,0
+		displayFolder: China\Base
+		lineageTag: 8519a8f5-660f-469e-9625-8181f3d4d7da
+
+	measure 'China Kg Liquidados' = SUM ( 'HAC Tabla_China'[kg_carne_liquidados] )
+		formatString: #,0
+		displayFolder: China\Base
+		lineageTag: ca23b8b5-1b90-4857-988b-21a5fc0d6f65
+
+	measure 'China Monto Hacienda' = SUM ( 'HAC Tabla_China'[monto_hacienda] )
+		formatString: \$ #,0
+		displayFolder: China\Base
+		lineageTag: e2c6a518-c863-4302-9df4-446ed3179378
+
+	measure 'China Monto Gastos' = SUM ( 'HAC Tabla_China'[monto_gastos] )
+		formatString: \$ #,0
+		displayFolder: China\Base
+		lineageTag: dabafca4-be12-4ad4-af56-b511ecbf6ff6
+
+	measure 'China Monto Total' = SUM ( 'HAC Tabla_China'[monto_total] )
+		formatString: \$ #,0
+		displayFolder: China\Base
+		lineageTag: edce85c0-cbc9-411a-a6d4-93f14893b0c6
+
+	measure 'China Precio Final' = DIVIDE ( [China Monto Total], [China Kg Liquidados] )
+		formatString: \$ #,0.00
+		displayFolder: China\Base
+		lineageTag: 27737b68-0109-4a2c-b857-06496b1239e4
+
+	measure 'China Precio Hacienda' = DIVIDE ( [China Monto Hacienda], [China Kg Liquidados] )
+		formatString: \$ #,0.00
+		displayFolder: China\Precio
+		lineageTag: 1371bc3d-be24-48e8-81a1-ca61f717a010
+
+	measure 'China Gastos x Kg' = DIVIDE ( [China Monto Gastos], [China Kg Liquidados] )
+		formatString: \$ #,0.00
+		displayFolder: China\Precio
+		lineageTag: 4d907126-0596-4e8c-b137-115a30f45753
+
+	measure 'China % Kg Liquidado' = DIVIDE ( [China Kg Liquidados], [China Kg Carne] )
+		formatString: 0.0%
+		displayFolder: China\Precio
+		lineageTag: b25e1024-7fe3-43fa-8972-b85a4bfcb972
+
+	measure 'China Precio Sem Ant' =
+			VAR _sem = CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_China' )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        CALCULATE ( [China Precio Final], REMOVEFILTERS ( Calendario ), Calendario[Semana índice] = _sem - 1 )
+			    )
+		formatString: \$ #,0.00
+		displayFolder: China\Precio
+		lineageTag: bd4320bf-8606-4bc2-9ca0-c773e1c782b2
+
+	measure 'China Var % Sem Ant' =
+			VAR _ant = [China Precio Sem Ant]
+			RETURN
+			    IF ( NOT ISBLANK ( _ant ), DIVIDE ( [China Precio Ult Sem] - _ant, _ant ) )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: China\Precio
+		lineageTag: 1b97789a-2048-4241-9ed6-6c6e80b2c94c
+
+	measure 'China Precio 4 Sem Móvil' =
+			VAR _sem = CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_China' )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        CALCULATE (
+			            [China Precio Final],
+			            REMOVEFILTERS ( Calendario ),
+			            Calendario[Semana índice] > _sem - 4,
+			            Calendario[Semana índice] <= _sem
+			        )
+			    )
+		formatString: \$ #,0.00
+		displayFolder: China\Precio
+		lineageTag: 5535e2dd-a10a-4cb6-8dec-e98fbd472af8
+
+	measure 'China Rinde' = DIVIDE ( CALCULATE ( SUM ( 'HAC Tabla_China'[kg_carne] ), 'HAC Tabla_China'[kg_vivos] > 0 ), [China Kg Vivos] )
+		formatString: 0.0%
+		displayFolder: China\Faena
+		lineageTag: ac593b64-6548-4fd6-b378-e86f3fbd2a12
+
+	measure 'China Peso Vivo Prom' = DIVIDE ( [China Kg Vivos], CALCULATE ( SUM ( 'HAC Tabla_China'[cabezas] ), 'HAC Tabla_China'[kg_vivos] > 0 ) )
+		formatString: #,0.0
+		displayFolder: China\Faena
+		lineageTag: c7f66692-d093-42db-8d8a-344ea9217238
+
+	measure 'China Peso Medio Res' = DIVIDE ( [China Kg Carne], [China Cabezas] * 2 )
+		formatString: #,0.0
+		displayFolder: China\Faena
+		lineageTag: 377f02c8-fe80-408a-a807-3c9634b36c43
+
+	measure 'China % Cab A' = DIVIDE ( SUM ( 'HAC Tabla_China'[cab_a] ), [China Cabezas] )
+		formatString: 0.0%
+		displayFolder: China\Faena
+		lineageTag: a7ed0cdf-8a5e-43a2-bf81-bb6f25f94e7e
+
+	measure 'China % Cab B' = DIVIDE ( SUM ( 'HAC Tabla_China'[cab_b] ), [China Cabezas] )
+		formatString: 0.0%
+		displayFolder: China\Faena
+		lineageTag: d5170806-72e8-4daf-ac91-3535c17bc641
+
+	measure 'China % Cab C' = DIVIDE ( SUM ( 'HAC Tabla_China'[cab_c] ), [China Cabezas] )
+		formatString: 0.0%
+		displayFolder: China\Faena
+		lineageTag: 14de9ce2-3999-43f2-bbdc-c39fd52877f0
+
+	measure 'China % Cab D' = DIVIDE ( SUM ( 'HAC Tabla_China'[cab_d] ), [China Cabezas] )
+		formatString: 0.0%
+		displayFolder: China\Faena
+		lineageTag: a6acf147-be90-4a9f-8626-2d205df7428b
+
+	measure 'China % Cab E' = DIVIDE ( SUM ( 'HAC Tabla_China'[cab_e] ), [China Cabezas] )
+		formatString: 0.0%
+		displayFolder: China\Faena
+		lineageTag: 0a06194d-6d96-483b-8371-c606513bf5d8
+
+	measure 'China % Decomiso' = DIVIDE ( SUM ( 'HAC Tabla_China'[cab_xd] ) + SUM ( 'HAC Tabla_China'[cab_xq] ), [China Cabezas] )
+		formatString: 0.0%
+		displayFolder: China\Faena
+		lineageTag: 7d93982c-4fc9-4544-877a-1df553a76bc1
+
+	measure 'China % Menor 80' = DIVIDE ( SUM ( 'HAC Tabla_China'[cab_menor80] ), [China Cabezas] )
+		formatString: 0.0%
+		displayFolder: China\Faena
+		lineageTag: 49f6f560-93f0-4edc-b7bb-6a34a7276745
+
+	measure 'China Plazo Pond' =
+			VAR _t = FILTER ( 'HAC Tabla_China', NOT ISBLANK ( 'HAC Tabla_China'[plazo] ) )
+			RETURN
+			    DIVIDE ( SUMX ( _t, 'HAC Tabla_China'[plazo] * 'HAC Tabla_China'[monto_total] ), SUMX ( _t, 'HAC Tabla_China'[monto_total] ) )
+		formatString: 0
+		displayFolder: China\Compra
+		lineageTag: 8e1fc07f-b89b-4903-bff5-f030c79aec0e
+
+	measure 'Org Tropas' = COUNTROWS ( 'HAC Tabla_Organico' )
+		formatString: #,0
+		displayFolder: Orgánico\Base
+		lineageTag: f5926e57-2e8e-42e6-9fa1-c6c32befb10f
+
+	measure 'Org Cabezas' = SUM ( 'HAC Tabla_Organico'[cabezas] )
+		formatString: #,0.#
+		displayFolder: Orgánico\Base
+		lineageTag: 56a1d30c-f484-4f29-8fa1-6ec7cc5f7051
+
+	measure 'Org Kg Vivos' = SUM ( 'HAC Tabla_Organico'[kg_vivos] )
+		formatString: #,0
+		displayFolder: Orgánico\Base
+		lineageTag: a1fd8763-fab7-43b6-887e-fdfe0275b411
+
+	measure 'Org Kg Carne' = SUM ( 'HAC Tabla_Organico'[kg_carne] )
+		formatString: #,0
+		displayFolder: Orgánico\Base
+		lineageTag: c009e91e-3005-4491-b19c-73c9f9e42ac3
+
+	measure 'Org Kg Liquidados' = SUM ( 'HAC Tabla_Organico'[kg_carne_liquidados] )
+		formatString: #,0
+		displayFolder: Orgánico\Base
+		lineageTag: ac7ac707-f80e-4a35-8ae5-8593008e21ba
+
+	measure 'Org Monto Hacienda' = SUM ( 'HAC Tabla_Organico'[monto_hacienda] )
+		formatString: \$ #,0
+		displayFolder: Orgánico\Base
+		lineageTag: 46eb9562-7cf6-4a74-9cea-10d6d5d2a18a
+
+	measure 'Org Monto Gastos' = SUM ( 'HAC Tabla_Organico'[monto_gastos] )
+		formatString: \$ #,0
+		displayFolder: Orgánico\Base
+		lineageTag: aa94b263-d3ba-4580-a8d5-84b62e368c56
+
+	measure 'Org Monto Total' = SUM ( 'HAC Tabla_Organico'[monto_total] )
+		formatString: \$ #,0
+		displayFolder: Orgánico\Base
+		lineageTag: df4c8677-826c-462c-8c40-945d4ac9e415
+
+	measure 'Org Precio Final' = DIVIDE ( [Org Monto Total], [Org Kg Liquidados] )
+		formatString: \$ #,0.00
+		displayFolder: Orgánico\Base
+		lineageTag: f451f701-2461-4592-99af-bcca47087765
+
+	measure 'Org Precio Hacienda' = DIVIDE ( [Org Monto Hacienda], [Org Kg Liquidados] )
+		formatString: \$ #,0.00
+		displayFolder: Orgánico\Precio
+		lineageTag: 15c71bb7-28ba-4225-beff-5a9cb910e0ff
+
+	measure 'Org Gastos x Kg' = DIVIDE ( [Org Monto Gastos], [Org Kg Liquidados] )
+		formatString: \$ #,0.00
+		displayFolder: Orgánico\Precio
+		lineageTag: bb47e5c5-50c2-465e-98e6-3c28ac1c2dda
+
+	measure 'Org % Kg Liquidado' = DIVIDE ( [Org Kg Liquidados], [Org Kg Carne] )
+		formatString: 0.0%
+		displayFolder: Orgánico\Precio
+		lineageTag: 245f2890-09d6-4344-90b8-07538b22672b
+
+	measure 'Org Precio Sem Ant' =
+			VAR _sem = CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_Organico' )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        CALCULATE ( [Org Precio Final], REMOVEFILTERS ( Calendario ), Calendario[Semana índice] = _sem - 1 )
+			    )
+		formatString: \$ #,0.00
+		displayFolder: Orgánico\Precio
+		lineageTag: 473ab886-2fe3-4394-9db6-a57f2ef222be
+
+	measure 'Org Var % Sem Ant' =
+			VAR _ant = [Org Precio Sem Ant]
+			RETURN
+			    IF ( NOT ISBLANK ( _ant ), DIVIDE ( [Org Precio Ult Sem] - _ant, _ant ) )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Orgánico\Precio
+		lineageTag: 08d34903-67c4-472e-9e02-d0a48b857103
+
+	measure 'Org Precio 4 Sem Móvil' =
+			VAR _sem = CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_Organico' )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        CALCULATE (
+			            [Org Precio Final],
+			            REMOVEFILTERS ( Calendario ),
+			            Calendario[Semana índice] > _sem - 4,
+			            Calendario[Semana índice] <= _sem
+			        )
+			    )
+		formatString: \$ #,0.00
+		displayFolder: Orgánico\Precio
+		lineageTag: d0c9b6c7-17cc-4774-9b58-bd6e56d0b5bd
+
+	measure 'Org Rinde' = DIVIDE ( CALCULATE ( SUM ( 'HAC Tabla_Organico'[kg_carne] ), 'HAC Tabla_Organico'[kg_vivos] > 0 ), [Org Kg Vivos] )
+		formatString: 0.0%
+		displayFolder: Orgánico\Faena
+		lineageTag: 4d993c37-99a9-4051-a9c0-ee0eaed8200f
+
+	measure 'Org Peso Vivo Prom' = DIVIDE ( [Org Kg Vivos], CALCULATE ( SUM ( 'HAC Tabla_Organico'[cabezas] ), 'HAC Tabla_Organico'[kg_vivos] > 0 ) )
+		formatString: #,0.0
+		displayFolder: Orgánico\Faena
+		lineageTag: 0f0cce53-f3bd-4597-b9d1-977c57922ba0
+
+	measure 'Org Peso Medio Res' = DIVIDE ( [Org Kg Carne], [Org Cabezas] * 2 )
+		formatString: #,0.0
+		displayFolder: Orgánico\Faena
+		lineageTag: c4580fc0-6ec3-4697-8f9d-28464d26adba
+
+	measure 'Org % Cab A' = DIVIDE ( SUM ( 'HAC Tabla_Organico'[cab_a] ), [Org Cabezas] )
+		formatString: 0.0%
+		displayFolder: Orgánico\Faena
+		lineageTag: ce3e53e9-6fea-48af-8117-ccd5e6c3abea
+
+	measure 'Org % Cab B' = DIVIDE ( SUM ( 'HAC Tabla_Organico'[cab_b] ), [Org Cabezas] )
+		formatString: 0.0%
+		displayFolder: Orgánico\Faena
+		lineageTag: 39a407bf-8ca7-4990-af2b-cb540e6317f8
+
+	measure 'Org % Cab C' = DIVIDE ( SUM ( 'HAC Tabla_Organico'[cab_c] ), [Org Cabezas] )
+		formatString: 0.0%
+		displayFolder: Orgánico\Faena
+		lineageTag: f69a495b-1d07-4fcd-a858-3fc457962d2d
+
+	measure 'Org % Cab D' = DIVIDE ( SUM ( 'HAC Tabla_Organico'[cab_d] ), [Org Cabezas] )
+		formatString: 0.0%
+		displayFolder: Orgánico\Faena
+		lineageTag: 2c3027e9-6909-4751-9e96-f9da1e559153
+
+	measure 'Org % Cab E' = DIVIDE ( SUM ( 'HAC Tabla_Organico'[cab_e] ), [Org Cabezas] )
+		formatString: 0.0%
+		displayFolder: Orgánico\Faena
+		lineageTag: a30cad1e-1379-4e94-9e46-d64c4b13c1f5
+
+	measure 'Org % Decomiso' = DIVIDE ( SUM ( 'HAC Tabla_Organico'[cab_xd] ) + SUM ( 'HAC Tabla_Organico'[cab_xq] ), [Org Cabezas] )
+		formatString: 0.0%
+		displayFolder: Orgánico\Faena
+		lineageTag: e8051207-4f11-43ac-a759-e4d4b772d60a
+
+	measure 'Org % Menor 80' = DIVIDE ( SUM ( 'HAC Tabla_Organico'[cab_menor80] ), [Org Cabezas] )
+		formatString: 0.0%
+		displayFolder: Orgánico\Faena
+		lineageTag: 1a939f42-a6bf-43f7-a426-6ac8031e59f4
+
+	measure 'Org Plazo Pond' =
+			VAR _t = FILTER ( 'HAC Tabla_Organico', NOT ISBLANK ( 'HAC Tabla_Organico'[plazo] ) )
+			RETURN
+			    DIVIDE ( SUMX ( _t, 'HAC Tabla_Organico'[plazo] * 'HAC Tabla_Organico'[monto_total] ), SUMX ( _t, 'HAC Tabla_Organico'[monto_total] ) )
+		formatString: 0
+		displayFolder: Orgánico\Compra
+		lineageTag: e6d90270-ff02-45e5-b5af-4d5374d2f46e
+
+	measure 'Premium Orgánico' =
+			VAR _org = [Org Precio Final]
+			VAR _chn = [China Precio Final]
+			RETURN
+			    IF ( NOT ISBLANK ( _org ) && NOT ISBLANK ( _chn ), _org - _chn )
+		formatString: \$ #,0.00
+		displayFolder: General
+		lineageTag: 2f058f47-c32d-470c-ba2d-bce3a4f09e39
+
+	measure 'Premium Orgánico %' = DIVIDE ( [Premium Orgánico], [China Precio Final] )
+		formatString: 0.0%
+		displayFolder: General
+		lineageTag: b32f6bf6-1044-4f59-ac18-2929df393cd2
+
+	measure 'Ultima carga ETL' =
+			VAR _f =
+			    CALCULATE (
+			        MAX ( MAX ( 'HAC Tabla_China'[fecha_actualizacion] ), MAX ( 'HAC Tabla_Organico'[fecha_actualizacion] ) ),
+			        REMOVEFILTERS ()
+			    )
+			RETURN
+			    "Datos al " & FORMAT ( _f, "dd/mm/yyyy hh:nn" )
+		displayFolder: General
+		lineageTag: 5c4b38de-40cc-4dcd-ad14-61669d6ae4eb
+
+	measure 'China Precio Ult Sem' =
+			VAR _sem = CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_China' )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        CALCULATE ( [China Precio Final], REMOVEFILTERS ( Calendario ), Calendario[Semana índice] = _sem )
+			    )
+		formatString: \$ #,0.00
+		displayFolder: China\Precio
+		lineageTag: 3bcb82e0-b507-417a-9078-27f17097f6f1
+
+	measure 'China Desvío vs Total' =
+			VAR _precio = [China Precio Final]
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _precio ),
+			        _precio - CALCULATE ( [China Precio Final], REMOVEFILTERS ( Tropas[Comprador], Tropas[Proveedor], Tropas[tropa] ) )
+			    )
+		formatString: \$ #,0.00
+		displayFolder: China\Precio
+		lineageTag: 8a3308d4-105f-4500-a7b7-6a5abf364313
+
+	measure 'Org Precio Ult Sem' =
+			VAR _sem = CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_Organico' )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        CALCULATE ( [Org Precio Final], REMOVEFILTERS ( Calendario ), Calendario[Semana índice] = _sem )
+			    )
+		formatString: \$ #,0.00
+		displayFolder: Orgánico\Precio
+		lineageTag: 4fdcaf51-ff1a-4fa3-a75b-6025537b4e24
+
+	measure 'Org Desvío vs Total' =
+			VAR _precio = [Org Precio Final]
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _precio ),
+			        _precio - CALCULATE ( [Org Precio Final], REMOVEFILTERS ( Tropas[Comprador], Tropas[Proveedor], Tropas[tropa] ) )
+			    )
+		formatString: \$ #,0.00
+		displayFolder: Orgánico\Precio
+		lineageTag: 9bea5caa-fc12-4eb7-87dc-81cf3badf019
+
+	measure 'Total Tropas' = [China Tropas] + [Org Tropas]
+		formatString: #,0
+		displayFolder: Total ambos programas
+		lineageTag: 55ea51f4-36ab-414c-9a87-05fea2203d40
+
+	measure 'Total Kg Carne' = [China Kg Carne] + [Org Kg Carne]
+		formatString: #,0
+		displayFolder: Total ambos programas
+		lineageTag: 79459115-1a89-4508-af69-226bdc892f19
+
+	measure 'Total Precio Final' = DIVIDE ( [China Monto Total] + [Org Monto Total], [China Kg Liquidados] + [Org Kg Liquidados] )
+		formatString: \$ #,0.00
+		displayFolder: Total ambos programas
+		lineageTag: 5f425e69-56e0-45e2-998b-24beb689c326
+
+	measure 'Total Precio Hacienda' = DIVIDE ( [China Monto Hacienda] + [Org Monto Hacienda], [China Kg Liquidados] + [Org Kg Liquidados] )
+		formatString: \$ #,0.00
+		displayFolder: Total ambos programas
+		lineageTag: 8cbb4b0a-abc9-48ef-8f21-81152987b645
+
+	measure 'Total Gastos x Kg' = DIVIDE ( [China Monto Gastos] + [Org Monto Gastos], [China Kg Liquidados] + [Org Kg Liquidados] )
+		formatString: \$ #,0.00
+		displayFolder: Total ambos programas
+		lineageTag: e5513c76-af99-457d-9753-ea66d6accd4a
+
+	measure 'Total Rinde' =
+			DIVIDE (
+			    CALCULATE ( SUM ( 'HAC Tabla_China'[kg_carne] ), 'HAC Tabla_China'[kg_vivos] > 0 )
+			        + CALCULATE ( SUM ( 'HAC Tabla_Organico'[kg_carne] ), 'HAC Tabla_Organico'[kg_vivos] > 0 ),
+			    [China Kg Vivos] + [Org Kg Vivos]
+			)
+		formatString: 0.0%
+		displayFolder: Total ambos programas
+		lineageTag: 056d81f8-e49e-4ab5-9a0a-fa85332b3091
+
+	measure 'Total Cab A' = SUM ( 'HAC Tabla_China'[cab_a] ) + SUM ( 'HAC Tabla_Organico'[cab_a] )
+		formatString: #,0.#
+		displayFolder: Total ambos programas
+		lineageTag: 01e08b56-134d-4079-aaec-6ca2adb030a0
+
+	measure 'Total Cab B' = SUM ( 'HAC Tabla_China'[cab_b] ) + SUM ( 'HAC Tabla_Organico'[cab_b] )
+		formatString: #,0.#
+		displayFolder: Total ambos programas
+		lineageTag: d5af488f-542f-4fec-ace5-c39dadb1f229
+
+	measure 'Total Cab C' = SUM ( 'HAC Tabla_China'[cab_c] ) + SUM ( 'HAC Tabla_Organico'[cab_c] )
+		formatString: #,0.#
+		displayFolder: Total ambos programas
+		lineageTag: db1afc46-754a-42b5-b0b8-b22d20ad24a2
+
+	measure 'Total Cab D' = SUM ( 'HAC Tabla_China'[cab_d] ) + SUM ( 'HAC Tabla_Organico'[cab_d] )
+		formatString: #,0.#
+		displayFolder: Total ambos programas
+		lineageTag: 73420e95-d828-44ab-a436-fae32db24c99
+
+	measure 'Total Cab E' = SUM ( 'HAC Tabla_China'[cab_e] ) + SUM ( 'HAC Tabla_Organico'[cab_e] )
+		formatString: #,0.#
+		displayFolder: Total ambos programas
+		lineageTag: ac910050-34ef-490c-9526-4d5c748b803a
+
+	measure 'Total Cab Decomiso' =
+			SUM ( 'HAC Tabla_China'[cab_xd] ) + SUM ( 'HAC Tabla_China'[cab_xq] )
+			    + SUM ( 'HAC Tabla_Organico'[cab_xd] ) + SUM ( 'HAC Tabla_Organico'[cab_xq] )
+		formatString: #,0.#
+		displayFolder: Total ambos programas
+		lineageTag: 68552601-8dc9-4ad4-88a9-c53aec8e8a0c
+
+	measure 'Total % Menor 80' = DIVIDE ( SUM ( 'HAC Tabla_China'[cab_menor80] ) + SUM ( 'HAC Tabla_Organico'[cab_menor80] ), [Total Cabezas] )
+		formatString: 0.0%
+		displayFolder: Total ambos programas
+		lineageTag: 025de690-bd19-4ab3-a2fb-d132774c385b
+
+	measure 'China Kg Carne Ult Sem' =
+			VAR _sem = CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_China' )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        CALCULATE ( [China Kg Carne], REMOVEFILTERS ( Calendario ), Calendario[Semana índice] = _sem )
+			    )
+		formatString: #,0
+		displayFolder: China\Última semana
+		lineageTag: ee636340-71e4-478d-b54d-77317baf880f
+
+	measure 'China Cabezas Ult Sem' =
+			VAR _sem = CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_China' )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        CALCULATE ( [China Cabezas], REMOVEFILTERS ( Calendario ), Calendario[Semana índice] = _sem )
+			    )
+		formatString: #,0.#
+		displayFolder: China\Última semana
+		lineageTag: e13aff42-1d80-4f27-bab9-e24b45ec29a6
+
+	measure 'China Rinde Ult Sem' =
+			VAR _sem = CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_China' )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        CALCULATE ( [China Rinde], REMOVEFILTERS ( Calendario ), Calendario[Semana índice] = _sem )
+			    )
+		formatString: 0.0%
+		displayFolder: China\Última semana
+		lineageTag: 4d4eba05-d5a4-4942-a5f4-dbb2c1251dd3
+
+	measure 'China % Kg Liquidado Ult Sem' =
+			VAR _sem = CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_China' )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        CALCULATE ( [China % Kg Liquidado], REMOVEFILTERS ( Calendario ), Calendario[Semana índice] = _sem )
+			    )
+		formatString: 0.0%
+		displayFolder: China\Última semana
+		lineageTag: bd37225d-6989-416b-b727-815eacf2672f
+
+	measure 'China Cab A' = SUM ( 'HAC Tabla_China'[cab_a] )
+		formatString: #,0.#
+		displayFolder: China\Faena
+		lineageTag: 2522ddce-1be9-492f-a365-0641bf53c913
+
+	measure 'China Cab B' = SUM ( 'HAC Tabla_China'[cab_b] )
+		formatString: #,0.#
+		displayFolder: China\Faena
+		lineageTag: 28d79f05-49ad-4ffb-aa01-b4b0d1a960f0
+
+	measure 'China Cab C' = SUM ( 'HAC Tabla_China'[cab_c] )
+		formatString: #,0.#
+		displayFolder: China\Faena
+		lineageTag: bc37a351-4d35-4f62-a47c-f627f1637384
+
+	measure 'China Cab D' = SUM ( 'HAC Tabla_China'[cab_d] )
+		formatString: #,0.#
+		displayFolder: China\Faena
+		lineageTag: ab48af03-0afc-4cb7-be79-9859a970e642
+
+	measure 'China Cab E' = SUM ( 'HAC Tabla_China'[cab_e] )
+		formatString: #,0.#
+		displayFolder: China\Faena
+		lineageTag: 044ca3c3-5b11-4734-9566-52407c947b4b
+
+	measure 'China Cab Decomiso' = SUM ( 'HAC Tabla_China'[cab_xd] ) + SUM ( 'HAC Tabla_China'[cab_xq] )
+		formatString: #,0.#
+		displayFolder: China\Faena
+		lineageTag: 2a305693-b486-4ddc-a9e4-3e9b2f21e09c
+
+	measure 'Org Kg Carne Ult Sem' =
+			VAR _sem = CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_Organico' )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        CALCULATE ( [Org Kg Carne], REMOVEFILTERS ( Calendario ), Calendario[Semana índice] = _sem )
+			    )
+		formatString: #,0
+		displayFolder: Orgánico\Última semana
+		lineageTag: a76b78b1-8200-41c6-ac55-ed38cf62a9ad
+
+	measure 'Org Cabezas Ult Sem' =
+			VAR _sem = CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_Organico' )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        CALCULATE ( [Org Cabezas], REMOVEFILTERS ( Calendario ), Calendario[Semana índice] = _sem )
+			    )
+		formatString: #,0.#
+		displayFolder: Orgánico\Última semana
+		lineageTag: fd43c99e-ef23-4632-a0ed-ba58f0bfc4aa
+
+	measure 'Org Rinde Ult Sem' =
+			VAR _sem = CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_Organico' )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        CALCULATE ( [Org Rinde], REMOVEFILTERS ( Calendario ), Calendario[Semana índice] = _sem )
+			    )
+		formatString: 0.0%
+		displayFolder: Orgánico\Última semana
+		lineageTag: 02c3bbfa-d79c-4a54-813a-63680afb883c
+
+	measure 'Org % Kg Liquidado Ult Sem' =
+			VAR _sem = CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_Organico' )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        CALCULATE ( [Org % Kg Liquidado], REMOVEFILTERS ( Calendario ), Calendario[Semana índice] = _sem )
+			    )
+		formatString: 0.0%
+		displayFolder: Orgánico\Última semana
+		lineageTag: b49cba13-4d1e-4886-9821-012da3cc560d
+
+	measure 'Org Cab A' = SUM ( 'HAC Tabla_Organico'[cab_a] )
+		formatString: #,0.#
+		displayFolder: Orgánico\Faena
+		lineageTag: fc785fac-7c51-4042-b2f4-5b668c676597
+
+	measure 'Org Cab B' = SUM ( 'HAC Tabla_Organico'[cab_b] )
+		formatString: #,0.#
+		displayFolder: Orgánico\Faena
+		lineageTag: 7ed5a8af-73c6-4e7d-8c19-5a7126431833
+
+	measure 'Org Cab C' = SUM ( 'HAC Tabla_Organico'[cab_c] )
+		formatString: #,0.#
+		displayFolder: Orgánico\Faena
+		lineageTag: 952fb9af-c4a2-4555-9e71-22c1562229c9
+
+	measure 'Org Cab D' = SUM ( 'HAC Tabla_Organico'[cab_d] )
+		formatString: #,0.#
+		displayFolder: Orgánico\Faena
+		lineageTag: eb805579-99bf-4288-a283-843add8c16f3
+
+	measure 'Org Cab E' = SUM ( 'HAC Tabla_Organico'[cab_e] )
+		formatString: #,0.#
+		displayFolder: Orgánico\Faena
+		lineageTag: 71e2bdbc-cee7-4d13-ae26-127eb0806c2c
+
+	measure 'Org Cab Decomiso' = SUM ( 'HAC Tabla_Organico'[cab_xd] ) + SUM ( 'HAC Tabla_Organico'[cab_xq] )
+		formatString: #,0.#
+		displayFolder: Orgánico\Faena
+		lineageTag: ec9dce88-f9be-4752-8aa7-9ba0a1e97f87
+
+	measure 'Premium Orgánico Ult Sem' =
+			VAR _org = [Org Precio Ult Sem]
+			VAR _china = [China Precio Ult Sem]
+			RETURN
+			    IF ( NOT ISBLANK ( _org ) && NOT ISBLANK ( _china ), _org - _china )
+		formatString: \$ #,0.00
+		displayFolder: General
+		lineageTag: 13c6878d-bb39-41de-974e-829b7166aad2
+
+	measure 'Premium Orgánico % Ult Sem' = DIVIDE ( [Premium Orgánico Ult Sem], [China Precio Ult Sem] )
+		formatString: 0.0%
+		displayFolder: General
+		lineageTag: 676fbf9c-d84e-447a-9b40-d4e16c99a9f4
+
+	measure 'Semana reportada' =
+			VAR _sem =
+			    MAX (
+			        CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_China' ),
+			        CALCULATE ( MAX ( Calendario[Semana índice] ), 'HAC Tabla_Organico' )
+			    )
+			VAR _ini = CALCULATE ( MIN ( Calendario[Date] ), REMOVEFILTERS ( Calendario ), Calendario[Semana índice] = _sem )
+			VAR _nombre = CALCULATE ( MAX ( Calendario[Semana] ), REMOVEFILTERS ( Calendario ), Calendario[Semana índice] = _sem )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( _sem ),
+			        "Semana " & _nombre & " · faena del " & FORMAT ( _ini, "dd/mm" ) & " al " & FORMAT ( _ini + 6, "dd/mm/yyyy" )
+			    )
+		displayFolder: General
+		lineageTag: 910705d8-e4bf-445c-b51c-7544a5aa5913
+
+	measure 'China Tropas sin costear' = COUNTROWS ( FILTER ( 'HAC Tabla_China', NOT COALESCE ( 'HAC Tabla_China'[tropa_liquidada], FALSE () ) ) )
+		formatString: #,0
+		displayFolder: China\Costeo
+		lineageTag: 8c11c339-8bc7-4a12-a772-23e3c0f25e86
+
+	measure 'China Aviso costeo' =
+			VAR _sin = FILTER ( 'HAC Tabla_China', NOT COALESCE ( 'HAC Tabla_China'[tropa_liquidada], FALSE () ) )
+			VAR _n = COUNTROWS ( _sin )
+			VAR _lista =
+			    CONCATENATEX (
+			        TOPN ( 3, _sin, 'HAC Tabla_China'[fecha_faena], ASC, 'HAC Tabla_China'[tropa], ASC ),
+			        'HAC Tabla_China'[tropa] & " (" & 'HAC Tabla_China'[proveedor] & ", faena " & FORMAT ( 'HAC Tabla_China'[fecha_faena], "dd/mm" ) & ")",
+			        " · ",
+			        'HAC Tabla_China'[fecha_faena], ASC, 'HAC Tabla_China'[tropa], ASC
+			    )
+			RETURN
+			    IF (
+			        ISBLANK ( _n ),
+			        IF ( NOT ISEMPTY ( 'HAC Tabla_China' ), "Todas las tropas de la selección están costeadas en SAP." ),
+			        "⚠ " & _n & IF ( _n = 1, " tropa sin costear en SAP", " tropas sin costear en SAP" )
+			            & " (sin monto ni precio hasta que se liquide): " & _lista
+			            & IF ( _n > 3, " · y " & ( _n - 3 ) & " más" )
+			    )
+		displayFolder: China\Costeo
+		lineageTag: 101c0182-5ff1-4dbc-9534-ef515bfa0da9
+
+	measure 'China Aviso costeo color' = IF ( [China Tropas sin costear] > 0, "#b3261e", "#1e6b3a" )
+		displayFolder: China\Costeo
+		lineageTag: cb2fdb2f-f57a-4e7f-af16-4b98f19e0985
+
+	measure 'Org Tropas sin costear' = COUNTROWS ( FILTER ( 'HAC Tabla_Organico', NOT COALESCE ( 'HAC Tabla_Organico'[tropa_liquidada], FALSE () ) ) )
+		formatString: #,0
+		displayFolder: Orgánico\Costeo
+		lineageTag: a3b02f7d-98db-4458-ba2b-5bfdaa9a72c9
+
+	measure 'Org Aviso costeo' =
+			VAR _sin = FILTER ( 'HAC Tabla_Organico', NOT COALESCE ( 'HAC Tabla_Organico'[tropa_liquidada], FALSE () ) )
+			VAR _n = COUNTROWS ( _sin )
+			VAR _lista =
+			    CONCATENATEX (
+			        TOPN ( 3, _sin, 'HAC Tabla_Organico'[fecha_faena], ASC, 'HAC Tabla_Organico'[tropa], ASC ),
+			        'HAC Tabla_Organico'[tropa] & " (" & 'HAC Tabla_Organico'[proveedor] & ", faena " & FORMAT ( 'HAC Tabla_Organico'[fecha_faena], "dd/mm" ) & ")",
+			        " · ",
+			        'HAC Tabla_Organico'[fecha_faena], ASC, 'HAC Tabla_Organico'[tropa], ASC
+			    )
+			RETURN
+			    IF (
+			        ISBLANK ( _n ),
+			        IF ( NOT ISEMPTY ( 'HAC Tabla_Organico' ), "Todas las tropas de la selección están costeadas en SAP." ),
+			        "⚠ " & _n & IF ( _n = 1, " tropa sin costear en SAP", " tropas sin costear en SAP" )
+			            & " (sin monto ni precio hasta que se liquide): " & _lista
+			            & IF ( _n > 3, " · y " & ( _n - 3 ) & " más" )
+			    )
+		displayFolder: Orgánico\Costeo
+		lineageTag: b1833bf2-94b0-4908-9f7b-74c2ff09941e
+
+	measure 'Org Aviso costeo color' = IF ( [Org Tropas sin costear] > 0, "#b3261e", "#1e6b3a" )
+		displayFolder: Orgánico\Costeo
+		lineageTag: e5869746-ad74-4e58-bae2-ed5005ec257c
+
+	measure 'China Cab por calidad' =
+			VAR _cab =
+			    SUMX (
+			        VALUES ( Calidades[Calidad] ),
+			        SWITCH (
+			            Calidades[Calidad],
+			            "A", [China Cab A],
+			            "B", [China Cab B],
+			            "C", [China Cab C],
+			            "D", [China Cab D],
+			            "E", [China Cab E],
+			            "Decomiso", [China Cab Decomiso]
+			        )
+			    )
+			RETURN
+			    IF ( _cab <> 0, _cab )
+		formatString: #,0.#
+		displayFolder: China\Faena
+		lineageTag: 32827560-e3ee-48ec-b21e-6ed056c58fe7
+
+	measure 'Org Cab por calidad' =
+			VAR _cab =
+			    SUMX (
+			        VALUES ( Calidades[Calidad] ),
+			        SWITCH (
+			            Calidades[Calidad],
+			            "A", [Org Cab A],
+			            "B", [Org Cab B],
+			            "C", [Org Cab C],
+			            "D", [Org Cab D],
+			            "E", [Org Cab E],
+			            "Decomiso", [Org Cab Decomiso]
+			        )
+			    )
+			RETURN
+			    IF ( _cab <> 0, _cab )
+		formatString: #,0.#
+		displayFolder: Orgánico\Faena
+		lineageTag: 9e18d792-c214-46d2-8f11-d2987a6737c8
+
+	measure 'Texto semana' =
+			VAR _n = COUNTROWS ( VALUES ( Calendario[Semana filtro] ) )
+			VAR _sel = SELECTEDVALUE ( Calendario[Semana filtro] )
+			VAR _actual = CALCULATE ( MAX ( Calendario[Semana] ), REMOVEFILTERS ( Calendario ), Calendario[Semana filtro] = "Semana actual" )
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        NOT ISFILTERED ( Calendario[Semana filtro] ), "Todas las semanas",
+			        _sel = "Semana actual", "Semana actual (" & _actual & ")",
+			        _n = 1, "Semana " & _sel,
+			        _n & " semanas (" & MIN ( Calendario[Semana] ) & " a " & MAX ( Calendario[Semana] ) & ")"
+			    )
+		displayFolder: General\Títulos
+		lineageTag: dcbd0a63-18e0-45c5-bf08-5b4f05544359
+
+	measure 'Texto tipo compra' =
+			IF (
+			    ISFILTERED ( Tropas[Tipo compra] ),
+			    CONCATENATEX ( VALUES ( Tropas[Tipo compra] ), Tropas[Tipo compra], " + ", Tropas[Tipo compra], ASC ),
+			    "Todos los tipos de compra"
+			)
+		displayFolder: General\Títulos
+		lineageTag: cd28bb06-42e8-4ce5-99c1-f51933063c5e
+
+	measure 'Titulo calidades China' = "Calidades China · " & [Texto semana] & " · " & [Texto tipo compra]
+		displayFolder: General\Títulos
+		lineageTag: 7e0f48df-da57-4d37-b421-458dd3ff7c58
+
+	measure 'Titulo calidades Orgánico' = "Calidades Orgánico · " & [Texto semana] & " · " & [Texto tipo compra]
+		displayFolder: General\Títulos
+		lineageTag: 8b549dc1-d123-4846-9f25-8c8853a6efc5
+
+	measure 'Titulo matriz' = "Precio por comprador / proveedor (desvío vs total del programa) · " & [Texto semana] & " · " & [Texto tipo compra]
+		displayFolder: General\Títulos
+		lineageTag: 1259e337-2945-48bd-817a-64168ae4692c
+
+	measure 'Titulo precio semanal' = "Precio final ponderado por semana ($/kg) · Todas las semanas · " & [Texto tipo compra]
+		displayFolder: General\Títulos
+		lineageTag: 607f235a-a004-46b6-af21-e6f5743ecf5e
+
+	measure 'Titulo kg semanal' = "Kg carne por semana · Todas las semanas · " & [Texto tipo compra]
+		displayFolder: General\Títulos
+		lineageTag: 8dab0c38-3f0e-4e30-974f-5137f1681615
+
+	measure 'Titulo gastos semanal' = "Gastos por kg: comisiones + flete ($/kg) · Todas las semanas · " & [Texto tipo compra]
+		displayFolder: General\Títulos
+		lineageTag: 8920d5b8-62fe-4427-853f-4d10f1351042
+
+	column Column
+		isHidden
+		formatString: 0
+		lineageTag: 2f0193e6-3b72-49c1-960b-9c1a980f5921
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Medidas = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 5f427da69cbf4e2c9329fd9823af32f7
+

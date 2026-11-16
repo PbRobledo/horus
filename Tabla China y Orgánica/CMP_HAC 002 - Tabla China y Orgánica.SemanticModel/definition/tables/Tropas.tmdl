@@ -1,0 +1,77 @@
+table Tropas
+	lineageTag: bf4eba6f-7ad0-45c4-b2a3-f66261681f27
+
+	column tropa
+		dataType: string
+		lineageTag: 08d4ddc7-85d8-496a-b3e0-0678c81ae294
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [tropa]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Programa
+		dataType: string
+		lineageTag: 6b1e84f5-9946-4128-bb2e-717a2dcfc90a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Programa]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo compra'
+		dataType: string
+		lineageTag: 95dfccb8-3bc3-4fc1-b112-fa93cc81f1b1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Tipo compra]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Comprador
+		dataType: string
+		lineageTag: dec70f29-ffff-4b86-b3b6-118fbec0b574
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Comprador]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Proveedor
+		dataType: string
+		lineageTag: ebfe68fa-79fa-4efc-bdc4-3ff00b10dbcc
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Proveedor]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Tropas = calculated
+		mode: import
+		source =
+				-- Una fila por tropa de ambos programas: permite filtrar y cruzar China y Orgánico por tropa,
+				-- tipo de compra, comprador y proveedor. Una tropa pertenece a un solo programa; si apareciera en
+				-- ambas tablas se toma la de China para no duplicar la clave.
+				VAR _china =
+				    SELECTCOLUMNS (
+				        'HAC Tabla_China',
+				        "tropa", 'HAC Tabla_China'[tropa],
+				        "Programa", "China",
+				        "Tipo compra", SWITCH ( 'HAC Tabla_China'[tipo_compra], "EF", "Directa estancia", "DIF", "Directa intermediario", "RF", "Feria", "S/D" ),
+				        "Comprador", COALESCE ( 'HAC Tabla_China'[comprador], "Sin comprador" ),
+				        "Proveedor", COALESCE ( 'HAC Tabla_China'[proveedor], "Sin proveedor" )
+				    )
+				VAR _org =
+				    SELECTCOLUMNS (
+				        FILTER ( 'HAC Tabla_Organico', NOT ( 'HAC Tabla_Organico'[tropa] IN DISTINCT ( 'HAC Tabla_China'[tropa] ) ) ),
+				        "tropa", 'HAC Tabla_Organico'[tropa],
+				        "Programa", "Orgánico",
+				        "Tipo compra", SWITCH ( 'HAC Tabla_Organico'[tipo_compra], "EF", "Directa estancia", "DIF", "Directa intermediario", "RF", "Feria", "S/D" ),
+				        "Comprador", COALESCE ( 'HAC Tabla_Organico'[comprador], "Sin comprador" ),
+				        "Proveedor", COALESCE ( 'HAC Tabla_Organico'[proveedor], "Sin proveedor" )
+				    )
+				RETURN
+				    UNION ( _china, _org )
+
+	annotation PBI_Id = 038b4f4219b943b4a48ebd4b17340a93
+

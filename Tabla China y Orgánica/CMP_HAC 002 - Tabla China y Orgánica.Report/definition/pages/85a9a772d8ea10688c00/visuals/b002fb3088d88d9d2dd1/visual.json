@@ -1,0 +1,251 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "b002fb3088d88d9d2dd1",
+  "position": {
+    "x": 11.666666666666668,
+    "y": 375,
+    "z": 0,
+    "height": 693.33333333333337,
+    "width": 1896.6666666666667,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Calendario"
+                    }
+                  },
+                  "Property": "Año"
+                }
+              },
+              "queryRef": "Calendario.Año",
+              "nativeQueryRef": "Año",
+              "displayName": "Año"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Calendario"
+                    }
+                  },
+                  "Property": "Mes"
+                }
+              },
+              "queryRef": "Calendario.Mes",
+              "nativeQueryRef": "Mes",
+              "displayName": "Mes"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "HAC Tabla_China"
+                    }
+                  },
+                  "Property": "semana_iso"
+                }
+              },
+              "queryRef": "HAC Tabla_China.semana_iso",
+              "nativeQueryRef": "semana_iso",
+              "displayName": "Semana"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "HAC Tabla_China"
+                    }
+                  },
+                  "Property": "tropa"
+                }
+              },
+              "queryRef": "HAC Tabla_China.tropa",
+              "nativeQueryRef": "Tropa",
+              "displayName": "Tropa"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "HAC Tabla_China"
+                    }
+                  },
+                  "Property": "proveedor"
+                }
+              },
+              "queryRef": "HAC Tabla_China.proveedor",
+              "nativeQueryRef": "Proveedor",
+              "displayName": "Proveedor"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "China Cabezas"
+                }
+              },
+              "queryRef": "_Medidas.China Cabezas",
+              "nativeQueryRef": "China Cabezas",
+              "displayName": "Total de Cabezas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "China Precio Final"
+                }
+              },
+              "queryRef": "_Medidas.China Precio Final",
+              "nativeQueryRef": "China Precio Final",
+              "displayName": "Precio Final"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "China Kg Vivos"
+                }
+              },
+              "queryRef": "_Medidas.China Kg Vivos",
+              "nativeQueryRef": "China Kg Vivos",
+              "displayName": "Kg Vivos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "China Kg Carne"
+                }
+              },
+              "queryRef": "_Medidas.China Kg Carne",
+              "nativeQueryRef": "China Kg Carne",
+              "displayName": "Kg Carne"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "China Monto Total"
+                }
+              },
+              "queryRef": "_Medidas.China Monto Total",
+              "nativeQueryRef": "China Monto Total",
+              "displayName": "Monto Total (Final con Gastos)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Medidas"
+                  }
+                },
+                "Property": "China Monto Total"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "columnAdjustment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'growToFit'"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnFormatting": [
+        {
+          "properties": {
+            "labelPrecision": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Medidas.China Cabezas"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "stylePreset": [
+        {
+          "properties": {
+            "name": {
+              "expr": {
+                "Literal": {
+                  "Value": "'BoldHeader'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

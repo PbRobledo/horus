@@ -1,0 +1,16 @@
+relationship 27f3596f-985b-4286-802e-a97bbf625e8e
+	fromColumn: 'HAC Tabla_China'.fecha_faena
+	toColumn: Calendario.Date
+
+relationship 8d4ff965-e10e-4ebf-93e0-be116a21c2a2
+	fromColumn: 'HAC Tabla_Organico'.fecha_faena
+	toColumn: Calendario.Date
+
+relationship a021df52-f8c8-4108-9be0-55a6696a822b
+	fromColumn: 'HAC Tabla_China'.tropa
+	toColumn: Tropas.tropa
+
+relationship ac0a1439-e5ab-41ab-a16f-27d4251f9fc5
+	fromColumn: 'HAC Tabla_Organico'.tropa
+	toColumn: Tropas.tropa
+
